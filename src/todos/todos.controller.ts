@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Param, Patch, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Patch, Delete, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { Todo } from './interfaces/todo.interface';
 import { CreateTodoDto } from './dto/create-todo-dto';
@@ -8,7 +8,8 @@ export class TodosController {
     constructor(private readonly todosService: TodosService){}
 
     @Get(':id')
-    findOne(@Param('id') id:string){
+    findOne(@Param('id', new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_FOUND}
+    )) id:string){
         return this.todosService.findOne(id)
     }
 
