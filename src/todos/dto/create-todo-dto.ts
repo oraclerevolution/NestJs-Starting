@@ -1,15 +1,13 @@
-import { IsBoolean, IsNumber, IsOptional, IsString, MinLength, isNotEmpty } from "class-validator";
+import {IsNotEmpty, IsString, MinLength } from "class-validator";
 
 export class CreateTodoDto {
-    @IsNumber()
     readonly id: number;
-    @IsString()
+    @IsNotEmpty()
     @MinLength(6,{
         message:"La taille minimale du champ title est de 6 caractère"
     })
     readonly title: string;
     @IsString()
     readonly description?: string
-    @IsBoolean()
-    readonly done: boolean;
+    readonly done: string;
 }

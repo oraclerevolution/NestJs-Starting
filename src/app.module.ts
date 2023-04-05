@@ -6,10 +6,25 @@ import { TodosController } from './todos/todos.controller';
 import { TodosService } from './todos/todos.service';
 import { FirstMiddleware } from './middlewares/first/first.middleware';
 import { Logger } from './middlewares/Logger.middleware';
-TodosController
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TaskRepository } from './todos/task.repository';
+import { Task } from './todos/task.entity';
+import { TypeOrmExModule } from './database/typeorm-ex.module';
 
 @Module({
-  imports: [TodosModule],
+  imports: [TodosModule, TypeOrmModule.forRoot({
+    type: 'postgres',
+    host:'localhost',
+    port: 5432,
+    username:"postgres",
+    password:'postgres',
+    database:"task-managment",
+    autoLoadEntities:true,
+    synchronize: true,
+    entities: [Task]
+  }),
+  TypeOrmExModule.forCustomRepository([TaskRepository])
+],
   controllers: [AppController, TodosController],
   providers: [AppService, TodosService],
 })
