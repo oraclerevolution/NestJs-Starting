@@ -10,6 +10,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskRepository } from './todos/task.repository';
 import { Task } from './todos/task.entity';
 import { TypeOrmExModule } from './database/typeorm-ex.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './auth/user.entity';
+import { UsersRepository } from './auth/users.repository';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [TodosModule, TypeOrmModule.forRoot({
@@ -21,12 +27,13 @@ import { TypeOrmExModule } from './database/typeorm-ex.module';
     database:"task-managment",
     autoLoadEntities:true,
     synchronize: true,
-    entities: [Task]
+    entities: [Task, User]
   }),
-  TypeOrmExModule.forCustomRepository([TaskRepository])
+  TypeOrmExModule.forCustomRepository([TaskRepository, UsersRepository]),
+  AuthModule
 ],
-  controllers: [AppController, TodosController],
-  providers: [AppService, TodosService],
+  controllers: [AppController, TodosController, AuthController],
+  providers: [AppService, TodosService, AuthService, JwtService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer): any {
